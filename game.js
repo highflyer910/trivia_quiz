@@ -63,12 +63,11 @@ startGame = () => {
 };
 
 getNewQuestion = () => {
-    if (availableQuestions.length === 0 || questionCounter >= MAX_QUESTIONS) {
+    if (availableQuestions.length === 0 || questionCounter === MAX_QUESTIONS) {
         localStorage.setItem('mostRecentScore', score);
         return window.location.assign('/end.html');
     }
-    questionCounter++;
-    progressText.innerText = `Question ${questionCounter}/${MAX_QUESTIONS}`;
+    progressText.innerText = `Question ${questionCounter + 1}/${MAX_QUESTIONS}`;
 
     const questionIndex = Math.floor(Math.random() * availableQuestions.length);
     currentQuestion = availableQuestions[questionIndex];
@@ -91,8 +90,7 @@ startTimer = () => {
         updateTimerUI(timeLeft);
         if (timeLeft === 0) {
             clearInterval(timer);
-            questionCounter++; // Increment the question counter
-            progressText.innerText = `Question ${questionCounter}/${MAX_QUESTIONS}`; // Update the question counter text
+            questionCounter++;
             getNewQuestion();
         }
     }, 1000);
@@ -123,6 +121,7 @@ choices.forEach((choice) => {
 
         setTimeout(() => {
             selectedChoice.parentElement.classList.remove(classToApply);
+            questionCounter++;
             getNewQuestion();
         }, 1000);
     });
